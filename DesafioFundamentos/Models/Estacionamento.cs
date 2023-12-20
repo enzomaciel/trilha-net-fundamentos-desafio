@@ -4,7 +4,7 @@ namespace DesafioFundamentos.Models
     {
         private decimal precoInicial = 0;
         private decimal precoPorHora = 0;
-        private List<string> veiculos = new List<string>();
+        private List<Carro> veiculos = new List<Carro>();
 
         public Estacionamento(decimal precoInicial, decimal precoPorHora)
         {
@@ -17,43 +17,46 @@ namespace DesafioFundamentos.Models
             //Implementado!!!!!!
             Console.WriteLine("Digite a placa do veículo para estacionar:");
             string placa = Console.ReadLine();
-            if(verificarPlacas(placa)){
-                veiculos.Add(placa);
-                Console.WriteLine($"Veiculo de placa {placa} adicionado com sucesso");
-            }else{
-                Console.WriteLine($"Placa invalidade, por favor corrija a placa");
+            Console.WriteLine("Digite o nome do veículo para estacionar:");
+            string nome = Console.ReadLine();
+            Console.WriteLine("Digite a marca do veículo para estacionar:");
+            string marca = Console.ReadLine();
+            try
+            {
+                Carro carro = new Carro(placa,nome,marca);
+                veiculos.Add(carro);
             }
-            
-            
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         public void RemoverVeiculo()
         {
+
             Console.WriteLine("Digite a placa do veículo para remover:");
             
             //Implementado!!!!!!
-            string placa = Console.ReadLine();
-            if(verificarPlacas(placa)){
-                 //Implementado!!!!!!
-                if (veiculos.Any(x => x.ToUpper() == placa.ToUpper()))
-                {
-                    Console.WriteLine("Digite a quantidade de horas que o veículo permaneceu estacionado:");
-                    //Implementado!!!!!!               
-                    int horas = 0;
-                    horas = int.Parse(Console.ReadLine());
-                    decimal valorTotal = 0;
-                    valorTotal = precoInicial + precoPorHora * horas;
-                    //Implementado!!!!!!
-                    veiculos.Remove(placa);
-                    Console.WriteLine($"O veículo {placa} foi removido e o preço total foi de: R$ {valorTotal}");
+            string placa = Console.ReadLine().ToUpper();
+            Console.WriteLine("Quantas horas o carro permaneceu?");
+            Decimal horaspermanecidas = Decimal.Parse(Console.ReadLine());
+            Decimal horasTotais = (horaspermanecidas * precoPorHora) + precoInicial; 
+            foreach (Carro carro in veiculos)
+            {
+                if(carro.verificarPlacas(placa)){
+                    if(carro.Placa == placa){
+                        veiculos.Remove(carro);
+                        Console.WriteLine($"Valor do estaciomento foi = R${horasTotais}");
+                        Console.WriteLine($"Carro com a placa {placa} removido com sucesso");
+                        break;
+                    }
+                }else{
+                    Console.WriteLine("Placa fora do formato");
+                    break;       
                 }
-                else
-                {
-                    Console.WriteLine("Desculpe, esse veículo não está estacionado aqui. Confira se digitou a placa corretamente");
-                }
-            }else{
-                Console.WriteLine($"Placa invalidade, por favor corrija a placa");
             }
+            
         }
 
         public void ListarVeiculos()
@@ -62,79 +65,14 @@ namespace DesafioFundamentos.Models
             {
                 Console.WriteLine("Os veículos estacionados são:");
                 //Implementado!!!!!!
-                foreach (string veiculo in veiculos)
+                foreach (Carro carro in veiculos)
                 {
-                    Console.WriteLine(veiculo);
+                    Console.WriteLine($"{carro.Placa} - {carro.Nome}");
                 }
             }
             else
             {
                 Console.WriteLine("Não há veículos estacionados.");
-            }
-        }
-        //Coloquei o desafio de verificas se estão no formato das placas padrões do Brasilm, Implementado!!!!!!
-        public bool verificarPlacas(string placa)
-        {
-            placa = placa.ToLower();
-            string letras ="qwertyuiopasdfghjklzxcvbnm" ;
-            string numeros = "1234567890";
-            if(placa.Length == 8){
-                string placa_letras = placa.Remove(3,5);
-                string placa_numeros = placa.Remove(0,4);
-                int verificador1 = 0;
-                foreach (char letra in placa_letras)
-                {
-                    if(letras.IndexOf(letra) != -1 ){
-                        verificador1++;
-                    }
-                }
-                foreach (char numero in placa_numeros)
-                {
-                    if(numeros.IndexOf(numero) != -1){
-                        verificador1++;
-                    }
-                }
-                if(verificador1 == 7){
-                    return true;
-                }else{
-                    return false;
-                }
-            }else if(placa.Length == 7)
-            {
-                string placa_parte1 = placa.Remove(3,4);
-                string placa_parte2 = placa.Substring(3,2);
-                string placa_parte3 = placa.Remove(0,5);
-                int verificador2 = 0;
-                foreach (char element in placa_parte2)
-                {
-                    if(numeros.IndexOf(element) != -1){
-                        verificador2++;
-                    }
-                }
-                if(verificador2 >= 1){
-                        foreach (char element in placa_parte1)
-                        {
-                            if(letras.IndexOf(element) != -1){
-                                verificador2++;
-                            }
-                        }
-                        foreach (char element in placa_parte3)
-                        {
-                            if(numeros.IndexOf(element) != -1){
-                                verificador2++;
-                            }
-                        }
-                        if(verificador2 == 7){
-                            return true;
-                        }
-                }else{
-                    return false;
-                }
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }
