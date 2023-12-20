@@ -35,4 +35,4 @@ Por último, deverá ser feito um menu interativo com as seguintes ações imple
 
 
 ## Solução
-O código está pela metade, e você deverá dar continuidade obedecendo as regras descritas acima, para que no final, tenhamos um programa funcional. Procure pela palavra comentada "TODO" no código, em seguida, implemente conforme as regras acima.
+Implementado a logica para adicionar veiculos, remoção de veiculos e listar veiculos no estacionamento. Implementei como desafio bonus a verificação das placas no modelo do Brasil no codigo.
